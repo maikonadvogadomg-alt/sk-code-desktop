@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="theme-color" content="#0d1117"/>
+<title>Extrator Jurídico — Maikon Caldeira OAB/MG 183712</title>
+<style>
+:root{
+  --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--bg4:#30363d;
+  --border:#30363d;--text:#e6edf3;--muted:#8b949e;
+  --primary:#58a6ff;--green:#3fb950;--yellow:#d29922;
+  --red:#f85149;--purple:#bc8cff;--orange:#f0883e;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px}
+a{color:var(--primary)}
+button{cursor:pointer;font-family:inherit}
+input,select,textarea{font-family:inherit;background:var(--bg3);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:7px 11px;outline:none;transition:border-color .15s;font-size:13px}
+input:focus,select:focus{border-color:var(--primary)}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
+
+/* NAV */
+#nav{
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  padding:0 16px;height:52px;display:flex;align-items:center;gap:12px;
+  position:sticky;top:0;z-index:100;
+}
+.logo{font-weight:800;font-size:15px;display:flex;align-items:center;gap:8px}
+.logo span{color:var(--primary)}
+.logo small{font-size:11px;color:var(--muted);font-weight:400}
+#nav-right{margin-left:auto;font-size:11px;color:var(--muted);text-align:right;line-height:1.4}
+
+/* MAIN */
+.page{max-width:900px;margin:0 auto;padding:20px 16px 40px}
+
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:14px}
+.card-title{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+
+/* BUTTONS */
+.btn{border:none;border-radius:6px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:.15s;white-space:nowrap}
+.btn-primary{background:var(--primary);color:#000}
+.btn-primary:hover{background:#79c0ff}
+.btn-secondary{background:var(--bg3);color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{border-color:var(--primary);color:var(--primary)}
+.btn-ghost{background:none;border:1px solid var(--border);color:var(--muted)}
+.btn-ghost:hover{color:var(--text);border-color:var(--muted)}
+.btn-success{background:var(--green);color:#000}
+.btn-sm{padding:4px 10px;font-size:11px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;gap:3px}
+.b-blue{background:rgba(88,166,255,.15);color:var(--primary)}
+.b-green{background:rgba(63,185,80,.15);color:var(--green)}
+.b-yellow{background:rgba(210,153,34,.15);color:var(--yellow)}
+.b-purple{background:rgba(188,140,255,.15);color:var(--purple)}
+.b-red{background:rgba(248,81,73,.15);color:var(--red)}
+.b-muted{background:var(--bg3);color:var(--muted)}
+.b-orange{background:rgba(240,136,62,.15);color:var(--orange)}
+
+/* ALERTS */
+.alert{padding:10px 14px;border-radius:8px;font-size:12px;line-height:1.5;margin:8px 0}
+.a-info{background:rgba(88,166,255,.08);border:1px solid rgba(88,166,255,.25);color:#79c0ff}
+.a-warn{background:rgba(210,153,34,.08);border:1px solid rgba(210,153,34,.25);color:var(--yellow)}
+.a-err{background:rgba(248,81,73,.08);border:1px solid rgba(248,81,73,.25);color:var(--red)}
+.a-ok{background:rgba(63,185,80,.08);border:1px solid rgba(63,185,80,.25);color:var(--green)}
+
+/* SEARCH */
+#search-row{display:flex;gap:8px;flex-wrap:wrap}
+#url-input{flex:1;min-width:200px;font-size:13px}
+#depth-sel{width:160px}
+
+/* SHORTCUTS */
+.shortcuts{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.shortcut{padding:5px 12px;border-radius:16px;border:1px solid rgba(88,166,255,.3);background:rgba(88,166,255,.06);color:var(--primary);font-size:11px;cursor:pointer;transition:.15s}
+.shortcut:hover{background:rgba(88,166,255,.18)}
+
+/* LOADING */
+#loading{display:none;align-items:center;gap:10px;padding:12px 0}
+.spinner{width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#load-msg{font-size:12px;color:var(--muted)}
+
+/* PROXY STATUS */
+#proxy-status{font-size:11px;color:var(--muted);margin-top:6px}
+
+/* TABS */
+.tabs{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:12px}
+.tab{padding:6px 14px;border-radius:6px;border:none;background:none;color:var(--muted);font-size:12px;font-weight:500;cursor:pointer;transition:.15s}
+.tab:hover{background:var(--bg3);color:var(--text)}
+.tab.active{background:var(--bg3);color:var(--text)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* STATS GRID */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px;margin-bottom:14px}
+.stat-tile{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center}
+.stat-n{font-size:28px;font-weight:800;font-family:'Courier New',monospace;color:var(--primary)}
+.stat-l{font-size:10px;color:var(--muted);margin-top:2px}
+
+/* SCRIPT CARDS */
+.script-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px}
+.script-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px}
+.script-pre{background:var(--bg);border-radius:5px;padding:9px;font-size:11px;font-family:'Courier New',monospace;color:#79c0ff;white-space:pre-wrap;max-height:120px;overflow:hidden;word-break:break-all;line-height:1.5}
+.script-actions{display:flex;gap:5px;flex-shrink:0}
+
+/* ASSET LIST */
+.list-box{border:1px solid var(--border);border-radius:8px;max-height:360px;overflow-y:auto}
+.list-row{display:flex;align-items:center;gap:8px;padding:7px 12px;border-bottom:1px solid rgba(48,54,61,.7);font-size:11px}
+.list-row:last-child{border-bottom:none}
+.list-row-url{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:'Courier New',monospace;color:var(--muted)}
+.list-row-url:hover{color:var(--primary)}
+
+/* LINKS LIST */
+.link-row{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-bottom:1px solid rgba(48,54,61,.7);gap:8px;font-size:12px}
+.link-row:last-child{border-bottom:none}
+.link-text{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:280px}
+.link-url{font-size:10px;font-family:'Courier New',monospace;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:300px}
+
+/* META */
+.meta-box{background:var(--bg3);border-radius:8px;padding:12px;margin-bottom:10px}
+.meta-row{display:flex;gap:8px;margin-bottom:5px;font-size:12px}
+.meta-key{color:var(--muted);width:70px;flex-shrink:0;font-weight:600}
+.meta-val{flex:1;color:var(--text);word-break:break-word}
+
+/* CODE MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:500;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal-box{background:var(--bg2);border:1px solid var(--border);border-radius:12px;width:min(820px,96vw);max-height:88vh;display:flex;flex-direction:column}
+.modal-head{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.modal-body{flex:1;overflow-y:auto;padding:14px}
+.modal-body pre{font-size:11px;font-family:'Courier New',monospace;color:#79c0ff;white-space:pre-wrap;word-break:break-all;line-height:1.6}
+
+/* FILTER ROW */
+.filter-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.filter-row input,.filter-row select{font-size:12px;padding:5px 9px}
+
+/* EMPTY */
+.empty{text-align:center;padding:32px;color:var(--muted);font-size:13px}
+
+/* AI FLOAT BTN */
+#ai-fab{
+  position:fixed;bottom:20px;right:20px;z-index:200;
+  background:var(--primary);color:#000;border:none;border-radius:50%;
+  width:52px;height:52px;font-size:22px;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px rgba(88,166,255,.4);cursor:pointer;transition:.2s;
+}
+#ai-fab:hover{transform:scale(1.08);background:#79c0ff}
+
+/* AI PANEL */
+#ai-panel{
+  position:fixed;bottom:84px;right:20px;z-index:200;
+  width:min(360px,94vw);background:var(--bg2);border:1px solid var(--border);
+  border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,.5);
+  display:flex;flex-direction:column;max-height:520px;
+  transition:.2s;transform-origin:bottom right;
+}
+#ai-panel.hidden{display:none}
+#ai-panel-head{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+#ai-msgs{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:7px}
+.ai-msg{padding:8px 11px;border-radius:8px;font-size:12px;line-height:1.6;white-space:pre-wrap;word-break:break-word}
+.ai-user{background:rgba(88,166,255,.12);border:1px solid rgba(88,166,255,.2)}
+.ai-bot{background:var(--bg3);border:1px solid var(--border)}
+.ai-sys{background:rgba(210,153,34,.1);border:1px solid rgba(210,153,34,.2);color:var(--yellow);font-size:11px}
+#ai-foot{padding:8px;border-top:1px solid var(--border);flex-shrink:0}
+#ai-ta{width:100%;min-height:60px;max-height:120px;resize:none;font-size:12px;padding:7px;border-radius:6px}
+#ai-send-row{display:flex;gap:5px;margin-top:6px;align-items:center}
+#ai-key-hint{font-size:10px;color:var(--muted);flex:1}
+
+/* KEY MODAL */
+#key-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:600;align-items:center;justify-content:center}
+#key-modal.open{display:flex}
+#key-box{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:22px;width:min(500px,95vw)}
+
+/* RESPONSIVE */
+@media(max-width:580px){
+  #search-row{flex-direction:column}
+  #depth-sel{width:100%}
+  .stat-n{font-size:22px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="logo">🔍 <span>Extrator</span> Jurídico <small>OAB/MG 183712</small></div>
+  <div id="nav-right">
+    Maikon Caldeira<br>Advogado
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- BUSCA -->
+  <div class="card">
+    <div class="card-title">URL para Extrair</div>
+    <div id="search-row">
+      <input id="url-input" type="text" placeholder="calculojuridico.com.br ou https://site.com.br">
+      <select id="depth-sel">
+        <option value="1">Só a página inicial</option>
+        <option value="2">+ subpáginas (até 5 links)</option>
+      </select>
+      <button class="btn btn-primary" onclick="doExtract()">🔍 Extrair</button>
+    </div>
+    <div class="shortcuts">
+      <button class="shortcut" onclick="quickUrl('https://www.calculojuridico.com.br')">Cálculo Jurídico</button>
+      <button class="shortcut" onclick="quickUrl('https://calculadorajuridica.com.br')">Calculadora Jurídica</button>
+      <button class="shortcut" onclick="quickUrl('https://previdenciario.com.br')">Previdenciário.com</button>
+      <button class="shortcut" onclick="quickUrl('https://www.jusbrasil.com.br')">JusBrasil</button>
+      <button class="shortcut" onclick="quickUrl('https://meu.inss.gov.br')">INSS Digital</button>
+      <button class="shortcut" onclick="quickUrl('https://www.stj.jus.br')">STJ</button>
+      <button class="shortcut" onclick="quickUrl('https://portal.tcu.gov.br')">TCU</button>
+      <button class="shortcut" onclick="quickUrl('https://www.trt3.jus.br')">TRT-3 (MG)</button>
+      <button class="shortcut" onclick="quickUrl('https://www.tjmg.jus.br')">TJMG</button>
+      <button class="shortcut" onclick="quickUrl('https://esaj.tjsp.jus.br')">TJSP (eSAJ)</button>
+    </div>
+    <div id="proxy-status"></div>
+    <div id="loading">
+      <div class="spinner"></div>
+      <span id="load-msg">Conectando ao proxy…</span>
+    </div>
+    <div id="err-box" style="display:none"></div>
+  </div>
+
+  <!-- RESULTADOS -->
+  <div id="results" style="display:none">
+
+    <!-- ABAS -->
+    <div class="card" style="padding:12px">
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('scripts',this)">⚖️ Scripts <span id="t-sc-n" class="badge b-yellow"></span></button>
+        <button class="tab" onclick="switchTab('overview',this)">📊 Visão Geral</button>
+        <button class="tab" onclick="switchTab('assets',this)">📁 Arquivos <span id="t-as-n" class="badge b-blue"></span></button>
+        <button class="tab" onclick="switchTab('links',this)">🔗 Links <span id="t-lk-n" class="badge b-muted"></span></button>
+        <button class="tab" onclick="switchTab('apis',this)">🌐 APIs <span id="t-api-n" class="badge b-purple"></span></button>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="btn btn-secondary btn-sm" onclick="dlScripts()">⬇ Scripts .js</button>
+        <button class="btn btn-secondary btn-sm" onclick="dlHtml()">⬇ HTML completo</button>
+        <button class="btn btn-secondary btn-sm" onclick="dlReport()">⬇ Relatório .txt</button>
+      </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <div class="tab-panel active card" id="tp-scripts">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+        <div>
+          <div style="font-size:14px;font-weight:700">Scripts Inline Encontrados</div>
+          <div id="sc-summary" style="font-size:11px;color:var(--muted);margin-top:3px"></div>
+        </div>
+      </div>
+      <div id="sc-filter" style="margin-bottom:10px;display:flex;gap:6px;flex-wrap:wrap">
+        <button class="btn btn-ghost btn-sm sc-filter-btn active" data-f="all" onclick="filterScripts('all',this)">Todos</button>
+        <button class="btn btn-ghost btn-sm sc-filter-btn" data-f="calc" onclick="filterScripts('calc',this)">⚖️ Cálculo</button>
+        <button class="btn btn-ghost btn-sm sc-filter-btn" data-f="math" onclick="filterScripts('math',this)">📐 Fórmula</button>
+        <button class="btn btn-ghost btn-sm sc-filter-btn" data-f="ajax" onclick="filterScripts('ajax',this)">🌐 AJAX</button>
+      </div>
+      <div id="sc-list"></div>
+      <div id="ext-js-list" style="margin-top:14px"></div>
+    </div>
+
+    <!-- OVERVIEW -->
+    <div class="tab-panel card" id="tp-overview" style="display:none">
+      <div class="stat-grid" id="ov-stats"></div>
+      <div id="ov-meta"></div>
+      <div id="ov-tech" style="margin-top:10px"></div>
+      <div id="ov-apis" style="margin-top:10px"></div>
+    </div>
+
+    <!-- ASSETS -->
+    <div class="tab-panel card" id="tp-assets" style="display:none">
+      <div class="filter-row">
+        <input id="af-txt" type="text" placeholder="Filtrar por nome…" style="flex:1" oninput="renderAssets()">
+        <select id="af-type" onchange="renderAssets()">
+          <option value="">Todos os tipos</option>
+          <option value="script">Scripts JS</option>
+          <option value="stylesheet">CSS</option>
+          <option value="image">Imagens</option>
+          <option value="font">Fontes</option>
+        </select>
+      </div>
+      <div class="list-box" id="as-list"></div>
+    </div>
+
+    <!-- LINKS -->
+    <div class="tab-panel card" id="tp-links" style="display:none">
+      <div class="filter-row">
+        <input id="lf-txt" type="text" placeholder="Filtrar links…" style="flex:1" oninput="renderLinks()">
+        <select id="lf-ext" onchange="renderLinks()">
+          <option value="">Todos</option>
+          <option value="int">Internos</option>
+          <option value="ext">Externos</option>
+        </select>
+      </div>
+      <div class="list-box" id="lk-list"></div>
+    </div>
+
+    <!-- APIS -->
+    <div class="tab-panel card" id="tp-apis" style="display:none">
+      <div style="margin-bottom:8px;font-size:12px;color:var(--muted)">Rotas de API / formulários detectados na página</div>
+      <div class="list-box" id="api-list"></div>
+    </div>
+
+  </div><!-- /results -->
+
+</div><!-- /page -->
+
+<!-- AI FAB -->
+<button id="ai-fab" onclick="toggleAI()" title="Assistente IA">🤖</button>
+
+<!-- AI PANEL -->
+<div id="ai-panel" class="hidden">
+  <div id="ai-panel-head">
+    <span style="font-size:12px;font-weight:700">🤖 Jasmim — Análise Jurídica</span>
+    <div style="display:flex;gap:4px">
+      <button class="btn btn-ghost btn-sm" onclick="clearAI()">🗑</button>
+      <button class="btn btn-ghost btn-sm" onclick="openKeyModal()">🔑</button>
+      <button class="btn btn-ghost btn-sm" onclick="toggleAI()">✕</button>
+    </div>
+  </div>
+  <div id="ai-msgs"></div>
+  <div id="ai-foot">
+    <textarea id="ai-ta" placeholder="Analise os scripts, explique um cálculo… (Ctrl+Enter envia)"></textarea>
+    <div id="ai-send-row">
+      <span id="ai-key-hint">Configure a chave → 🔑</span>
+      <button class="btn btn-secondary btn-sm" onclick="sendWithScripts()">📋 + scripts</button>
+      <button class="btn btn-primary btn-sm" onclick="sendAI()">Enviar</button>
+    </div>
+  </div>
+</div>
+
+<!-- CODE MODAL -->
+<div class="modal-bg" id="code-modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span id="cm-title" style="font-size:12px;font-weight:600;color:var(--muted)"></span>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-secondary btn-sm" onclick="copyModal()">📋 Copiar</button>
+        <button class="btn btn-ghost btn-sm" onclick="closeModal()">✕ Fechar</button>
+      </div>
+    </div>
+    <div class="modal-body"><pre id="cm-body"></pre></div>
+  </div>
+</div>
+
+<!-- KEY MODAL -->
+<div id="key-modal">
+  <div id="key-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div>
+        <div style="font-size:14px;font-weight:700">🔑 Chave de IA</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">Cole qualquer chave — o provedor é detectado automático</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="closeKeyModal()">✕</button>
+    </div>
+    <div class="a-info alert" style="margin-bottom:12px;font-size:11px">
+      <strong>IAs gratuitas:</strong><br>
+      • <code>gsk_…</code> → Groq — <a href="https://console.groq.com" target="_blank">console.groq.com</a><br>
+      • <code>AIza…</code> → Gemini — <a href="https://aistudio.google.com" target="_blank">aistudio.google.com</a>
+    </div>
+    <div style="margin-bottom:10px">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:4px;font-weight:600">Chave API</div>
+      <input type="password" id="ai-key-inp" placeholder="gsk_… ou AIza… ou sk-ant-…" style="width:100%" oninput="detectProvider()">
+      <div id="provider-det" style="font-size:11px;color:var(--green);margin-top:5px"></div>
+    </div>
+    <div style="margin-bottom:10px">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:4px;font-weight:600">Modelo (deixe em branco para auto)</div>
+      <input type="text" id="ai-model-inp" placeholder="auto" style="width:100%">
+    </div>
+    <div id="custom-url-wrap" style="margin-bottom:10px;display:none">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:4px;font-weight:600">URL Base (para chaves custom)</div>
+      <input type="text" id="ai-url-inp" placeholder="https://api.openai.com/v1" style="width:100%">
+    </div>
+    <button class="btn btn-primary" style="width:100%" onclick="saveKey()">✅ Salvar</button>
+  </div>
+</div>
+
+<script>
+/* ════════════ UTILS ════════════ */
+const qs = s => document.querySelector(s);
+const qsa = s => [...document.querySelectorAll(s)];
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function copyText(t){ navigator.clipboard?.writeText(t).then(()=>toast('📋 Copiado!')); }
+function dlBlob(blob,name){ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),5000); }
+
+let toastT;
+function toast(msg,type='ok'){
+  let el=qs('#__toast');
+  if(!el){el=document.createElement('div');el.id='__toast';document.body.appendChild(el);
+    Object.assign(el.style,{position:'fixed',bottom:'20px',left:'50%',transform:'translateX(-50%)',padding:'8px 18px',borderRadius:'8px',fontSize:'12px',fontWeight:'600',zIndex:'9999',transition:'opacity .3s',opacity:'0'});}
+  el.textContent=msg;
+  el.style.background=type==='err'?'var(--red)':type==='warn'?'var(--yellow)':'var(--green)';
+  el.style.color=(type==='warn')?'#000':'#fff';
+  el.style.opacity='1';
+  clearTimeout(toastT);toastT=setTimeout(()=>{el.style.opacity='0';},2600);
+}
+
+/* ════════════ IA — AUTO-DETECÇÃO SEM PROXY ════════════ */
+let aiKey='',aiModel='',aiUrl='',aiHistory=[];
+
+const LS_KEY='extrator-ai-key';
+function loadKeyFromStorage(){
+  try{const s=JSON.parse(localStorage.getItem(LS_KEY)||'null');if(s){aiKey=s.key||'';aiModel=s.model||'';aiUrl=s.url||'';updateKeyHint();}}catch{}
+}
+
+function detectKeyProvider(k){
+  if(!k) return null;
+  if(k.startsWith('sk-ant-')) return {p:'anthropic',m:'claude-haiku-4-20250514',u:''};
+  if(k.startsWith('AIza')||k.startsWith('ya29.')) return {p:'google',m:'gemini-2.0-flash',u:''};
+  if(k.startsWith('sk-or-')) return {p:'compat',m:'anthropic/claude-haiku',u:'https://openrouter.ai/api/v1'};
+  if(k.startsWith('gsk_')) return {p:'compat',m:'llama-3.3-70b-versatile',u:'https://api.groq.com/openai/v1'};
+  if(k.startsWith('xai-')) return {p:'compat',m:'grok-3-mini',u:'https://api.x.ai/v1'};
+  if(k.startsWith('ap-')) return {p:'compat',m:'mistral-large-latest',u:'https://api.mistral.ai/v1'};
+  if(k.startsWith('ds-')) return {p:'compat',m:'deepseek-chat',u:'https://api.deepseek.com/v1'};
+  if(k.startsWith('sk-')) return {p:'compat',m:'gpt-4o-mini',u:'https://api.openai.com/v1'};
+  if(k.length>20) return {p:'compat',m:'',u:''};
+  return null;
+}
+
+function detectProvider(){
+  const k=(qs('#ai-key-inp')?.value||'').trim();
+  const d=detectKeyProvider(k);
+  const el=qs('#provider-det');const uw=qs('#custom-url-wrap');
+  if(d){
+    const names={anthropic:'🟠 Anthropic',google:'🔵 Google Gemini',compat:'🟢 OpenAI-compatible'};
+    el.textContent=`→ ${names[d.p]||'Custom'} · modelo: ${d.m||'configure abaixo'}${d.u?' | '+d.u.replace('https://',''):''}`;
+    el.style.color='var(--green)';
+    if(qs('#ai-model-inp')&&!qs('#ai-model-inp').value&&d.m) qs('#ai-model-inp').value=d.m;
+    if(qs('#ai-url-inp')&&!qs('#ai-url-inp').value&&d.u) qs('#ai-url-inp').value=d.u;
+    uw&&(uw.style.display=d.u?'none':'block');
+  } else {
+    el.textContent=k?'→ Formato não reconhecido — informe a URL base abaixo':'';
+    uw&&(uw.style.display=k?'block':'none');
+  }
+}
+
+function saveKey(){
+  aiKey=(qs('#ai-key-inp')?.value||'').trim();
+  aiModel=(qs('#ai-model-inp')?.value||'').trim();
+  aiUrl=(qs('#ai-url-inp')?.value||'').trim();
+  try{localStorage.setItem(LS_KEY,JSON.stringify({key:aiKey,model:aiModel,url:aiUrl}));}catch{}
+  updateKeyHint();
+  closeKeyModal();
+  toast('✅ Chave salva!');
+}
+
+function updateKeyHint(){
+  const el=qs('#ai-key-hint');
+  if(!el) return;
+  if(aiKey){
+    const d=detectKeyProvider(aiKey);
+    const names={anthropic:'Anthropic',google:'Gemini',compat:'OpenAI-compat'};
+    el.textContent=`✓ ${names[d?.p||'']||'Custom'} · ${aiModel||d?.m||'auto'}`;
+    el.style.color='var(--green)';
+  } else {
+    el.textContent='Configure a chave → 🔑';
+    el.style.color='var(--muted)';
+  }
+}
+
+async function callAI(messages){
+  if(!aiKey) throw new Error('Nenhuma chave configurada. Clique em 🔑.');
+  const d=detectKeyProvider(aiKey);
+  if(!d) throw new Error('Formato de chave não reconhecido.');
+  const model=aiModel||d.m;
+
+  if(d.p==='anthropic'){
+    const sys=messages.find(m=>m.role==='system')?.content||'';
+    const chat=messages.filter(m=>m.role!=='system');
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':aiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model,max_tokens:8192,system:sys,messages:chat,temperature:0.5})});
+    if(!r.ok){let e=await r.text();try{const j=JSON.parse(e);e=j.error?.message||e;}catch{}throw new Error(`Anthropic ${r.status}: ${e.slice(0,300)}`);}
+    return (await r.json()).content?.[0]?.text||'';
+  }
+  if(d.p==='google'){
+    const sys=messages.find(m=>m.role==='system')?.content;
+    const chat=messages.filter(m=>m.role!=='system').map(m=>({role:m.role==='assistant'?'model':'user',parts:[{text:m.content}]}));
+    const body={contents:chat,generationConfig:{maxOutputTokens:8192,temperature:0.5}};
+    if(sys) body.systemInstruction={parts:[{text:sys}]};
+    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model||'gemini-2.0-flash'}:generateContent?key=${aiKey}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(!r.ok){let e=await r.text();try{const j=JSON.parse(e);e=j.error?.message||e;}catch{}throw new Error(`Gemini ${r.status}: ${e.slice(0,300)}`);}
+    return (await r.json()).candidates?.[0]?.content?.parts?.[0]?.text||'';
+  }
+  const base=(aiUrl||d.u||'https://api.openai.com/v1').replace(/\/$/,'');
+  const r=await fetch(`${base}/chat/completions`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${aiKey}`,'HTTP-Referer':'https://extrator-juridico.app','X-Title':'Extrator Jurídico — Maikon Caldeira'},body:JSON.stringify({model:model||'gpt-4o-mini',messages,max_tokens:8192,temperature:0.5})});
+  if(!r.ok){let e=await r.text();try{const j=JSON.parse(e);e=j.error?.message||e;}catch{}throw new Error(`${r.status}: ${e.slice(0,300)}`);}
+  return (await r.json()).choices?.[0]?.message?.content||'';
+}
+
+/* AI PANEL */
+let aiSending=false;
+function toggleAI(){qs('#ai-panel').classList.toggle('hidden');}
+function clearAI(){aiHistory=[];qs('#ai-msgs').innerHTML='';toast('🗑 Chat limpo');}
+function openKeyModal(){
+  qs('#ai-key-inp').value=aiKey;qs('#ai-model-inp').value=aiModel;qs('#ai-url-inp').value=aiUrl;
+  detectProvider();qs('#key-modal').classList.add('open');
+}
+function closeKeyModal(){qs('#key-modal').classList.remove('open');}
+
+function addMsg(role,text){
+  const el=document.createElement('div');
+  el.className='ai-msg '+(role==='user'?'ai-user':role==='sys'?'ai-sys':'ai-bot');
+  el.textContent=text;
+  const box=qs('#ai-msgs');box.appendChild(el);box.scrollTop=box.scrollHeight;
+  return el;
+}
+
+async function sendAI(extra){
+  if(aiSending) return;
+  const q=(qs('#ai-ta')?.value||'').trim();if(!q) return;
+  aiSending=true;
+  const txt=extra?q+'\n\nScripts encontrados:\n```javascript\n'+extra+'\n```':q;
+  addMsg('user',txt);qs('#ai-ta').value='';
+  aiHistory.push({role:'user',content:txt});
+  if(aiHistory.length>30) aiHistory=aiHistory.slice(-30);
+  const thinking=addMsg('bot','⏳ Analisando…');
+  const SYS=`Você é Jasmim, assistente jurídica do advogado Maikon Caldeira (OAB/MG 183712). Analise scripts de cálculo previdenciário/jurídico. Explique fórmulas, identifique índices (INPC, IPCA, Selic), tabelas do INSS e lógica de cálculo. Responda em português, seja objetivo e técnico.`;
+  try{
+    const r=await callAI([{role:'system',content:SYS},...aiHistory]);
+    thinking.textContent=r;aiHistory.push({role:'assistant',content:r});
+  }catch(err){
+    thinking.textContent='❌ '+err.message;
+    thinking.style.color='var(--red)';
+  }finally{aiSending=false;}
+}
+
+function sendWithScripts(){
+  if(!extData) return sendAI();
+  const jur=extData.scripts.filter(s=>s.hc||s.hf);
+  const src=(jur.length?jur:extData.scripts).slice(0,5).map((s,i)=>`/* Script #${i+1} */\n${s.full.slice(0,2000)}`).join('\n\n');
+  sendAI(src);
+}
+
+qs('#ai-ta').addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();sendAI();}});
+
+/* ════════════ PROXIES ════════════ */
+const PROXIES=[
+  url=>`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+  url=>`https://corsproxy.io/?${encodeURIComponent(url)}`,
+  url=>`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+];
+
+async function fetchViaProxy(url){
+  for(let i=0;i<PROXIES.length;i++){
+    try{
+      qs('#load-msg').textContent=`Proxy ${i+1}/3: ${['allorigins.win','corsproxy.io','codetabs.com'][i]}…`;
+      const r=await fetch(PROXIES[i](url),{signal:AbortSignal.timeout(14000)});
+      if(!r.ok) continue;
+      let d;try{d=await r.json();}catch{return await r.text();}
+      const h=d.contents||d.data||d;
+      if(typeof h==='string'&&h.length>80){
+        qs('#proxy-status').innerHTML=`<span style="color:var(--green);font-size:11px">✓ Proxy ${i+1} funcionou (${['allorigins.win','corsproxy.io','codetabs.com'][i]})</span>`;
+        return h;
+      }
+    }catch(e){if(i===PROXIES.length-1)throw e;}
+  }
+  throw new Error('Todos os proxies falharam. Verifique a URL ou tente novamente.');
+}
+
+/* ════════════ EXTRAÇÃO ════════════ */
+let extData=null;
+
+function quickUrl(url){qs('#url-input').value=url;doExtract();}
+
+async function doExtract(){
+  let url=(qs('#url-input').value||'').trim();
+  if(!url){toast('Digite uma URL','err');return;}
+  if(!/^https?:\/\//i.test(url)) url='https://'+url;
+  qs('#err-box').style.display='none';
+  qs('#results').style.display='none';
+  qs('#proxy-status').textContent='';
+  qs('#loading').style.display='flex';
+
+  try{
+    const html=await fetchViaProxy(url);
+    extData=parseAll(html,url);
+
+    const depth=parseInt(qs('#depth-sel').value)||1;
+    if(depth>=2){
+      const subs=getSameOriginLinks(html,url).slice(0,5);
+      for(const sub of subs){
+        try{
+          qs('#load-msg').textContent=`Subpágina: ${sub.replace(/^https?:\/\//,'').slice(0,40)}…`;
+          const sh=await fetchViaProxy(sub);
+          const sr=parseAll(sh,sub);
+          extData.scripts.push(...sr.scripts);
+          extData.assets.push(...sr.assets.filter(a=>!extData.assets.some(e=>e.url===a.url)));
+          extData.links.push(...sr.links.filter(l=>!extData.links.some(e=>e.url===l.url)));
+          extData.apis.push(...sr.apis.filter(a=>!extData.apis.some(e=>e.url===a.url)));
+        }catch{}
+      }
+    }
+
+    extData.rootUrl=url;extData.rawHtml=html;
+    renderAll();
+    qs('#results').style.display='block';
+  }catch(err){
+    qs('#err-box').style.display='block';
+    qs('#err-box').innerHTML=`<div class="alert a-err">⚠️ ${esc(err.message)}<br><br><small>Dica: tente sem www, ou use outra URL. Sites com Cloudflare podem bloquear proxies.</small></div>`;
+  }finally{
+    qs('#loading').style.display='none';
+    qs('#load-msg').textContent='Conectando ao proxy…';
+  }
+}
+
+/* ── PARSERS ───────────────────────── */
+function parseAll(html,base){
+  return{
+    meta:    parseMeta(html,base),
+    assets:  parseAssets(html,base),
+    links:   parseLinks(html,base),
+    scripts: parseScripts(html),
+    tech:    detectTech(html),
+    apis:    parseApis(html,base),
+  };
+}
+
+function parseMeta(html,base){
+  const g=p=>{const m=html.match(p);return(m?m[1]:'')?.trim()||'';};
+  return{
+    title:g(/<title[^>]*>([^<]*)<\/title>/i),
+    desc: g(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']*)["']/i)||g(/<meta[^>]+content=["']([^"']*)["'][^>]+name=["']description["']/i),
+    lang: g(/<html[^>]+lang=["']([^"']*)["']/i),
+    gen:  g(/<meta[^>]+name=["']generator["'][^>]+content=["']([^"']*)["']/i),
+    url:  base,
+  };
+}
+
+function parseAssets(html,base){
+  const seen=new Set(),out=[];
+  [[/<script[^>]+src=["']([^"']+)["']/gi,'script'],[/<link[^>]+(?:rel=["']stylesheet["'][^>]*href|href=["'][^"']+\.css)=["']([^"']+)["']/gi,'stylesheet'],[/<img[^>]+src=["']([^"']+)["']/gi,'image'],[/<link[^>]+href=["']([^"']+\.(?:woff2?|ttf|otf|eot))["']/gi,'font']].forEach(([p,t])=>{
+    let m;p.lastIndex=0;
+    while((m=p.exec(html))!==null){
+      try{const s=m[1].trim();if(!s||s.startsWith('data:')) continue;const abs=s.startsWith('http')?s:new URL(s,base).toString();if(!seen.has(abs)){seen.add(abs);out.push({url:abs,type:t,name:s.split('/').pop().split('?')[0]||s});}}catch{}
+    }
+  });
+  return out.slice(0,300);
+}
+
+function parseLinks(html,base){
+  const seen=new Set(),out=[];const bh=new URL(base).hostname;
+  let m;const p=/<a[^>]+href=["']([^"'#][^"']*)["'][^>]*>([\s\S]*?)<\/a>/gi;
+  while((m=p.exec(html))!==null){
+    try{const h=m[1].trim();if(!h||h.startsWith('javascript:')||h.startsWith('mailto:')) continue;const abs=h.startsWith('http')?h:new URL(h,base).toString();if(!seen.has(abs)){seen.add(abs);const txt=m[2].replace(/<[^>]+>/g,'').trim().slice(0,80);out.push({url:abs,text:txt||'(sem texto)',ext:new URL(abs).hostname!==bh});}}catch{}
+  }
+  return out.slice(0,300);
+}
+
+function getSameOriginLinks(html,base){
+  const seen=new Set(),out=[];const bh=new URL(base).hostname;
+  let m;const p=/href=["']([^"'#?][^"']*)["']/gi;
+  while((m=p.exec(html))!==null){
+    try{const h=m[1].trim();if(!h||h.startsWith('javascript:')) continue;const abs=h.startsWith('http')?h:new URL(h,base).toString();const u=new URL(abs);if(u.hostname!==bh) continue;const n=u.origin+u.pathname;if(!seen.has(n)&&n!==base.split('?')[0]){seen.add(n);out.push(n);}}catch{}
+  }
+  return out.slice(0,15);
+}
+
+function parseScripts(html){
+  const out=[];let m;const p=/<script(?![^>]+src=)[^>]*>([\s\S]*?)<\/script>/gi;let idx=0;
+  while((m=p.exec(html))!==null){
+    const c=(m[1]||'').trim();if(!c||c.length<30) continue;
+    const hc=/calc[uú]|c[aá]lculo|remuner|sal[aá]rio|benef[ií]cio|previdenci|inss|fator\s*previd|aposentad|pens[aã]o|corre[çc][aã]o|coeficiente|rmc|rma|segurado|competência|contrib|parcela|honorár|adiantamento|férias|rescisão|trabalhista/i.test(c);
+    const hf=/Math\.|function\s+calc|=\s*[\d.]+\s*[\*\/\+\-]|parseFloat|parseInt|\.toFixed\(|f[oó]rmula|aliq|juros|amortiz|desconto/i.test(c);
+    const ha=/fetch\s*\(|XMLHttpRequest|\.ajax\s*\(|axios\.|\.post\s*\(|\.get\s*\(/i.test(c);
+    out.push({i:idx++,full:c,pre:c.slice(0,500),size:c.length,hc,hf,ha});
+  }
+  return out;
+}
+
+function parseApis(html,base){
+  const out=[];const seen=new Set();
+  [/fetch\s*\(\s*['"`]([^'"`\s]+)['"`]/g,/['"`](\/api\/[^'"`\s?#]{2,})['"`]/g,/action=["']([^"']+\.(?:php|aspx|jsp|do)[^"']*)["']/gi].forEach(p=>{
+    let m;while((m=p.exec(html))!==null){
+      try{let u=m[1];if(u.startsWith('/')) u=new URL(u,base).toString();if(!u.startsWith('http')) continue;const k=new URL(u).pathname;if(!seen.has(k)){seen.add(k);out.push({url:u,path:k});}}catch{}
+    }
+  });
+  return out.slice(0,80);
+}
+
+const TECH_SIG={
+  'React':[/react(?:\.min)?\.js/,/__REACT_/,/data-reactroot/],'Next.js':[/__NEXT_DATA__/,/\/_next\/static/],
+  'Vue.js':[/vue(?:\.min)?\.js/,/__vue_/],'Angular':[/angular(?:\.min)?\.js/,/ng-version/],
+  'jQuery':[/jquery(?:\.min)?\.js/,/\$\(document\)\.ready/],'Bootstrap':[/bootstrap(?:\.min)?\.css/],
+  'WordPress':[/wp-content/,/wp-includes/],'Laravel':[/laravel/,/_token.*csrf/],'PHP':[/\.php/,/PHPSESSID/],
+  'Tailwind':[/tailwindcss/],'Vite':[/\/@vite\//],'ASP.NET':[/__VIEWSTATE/,/\.aspx/],
+};
+function detectTech(html){ return Object.entries(TECH_SIG).filter(([,pp])=>pp.some(p=>p.test(html))).map(([n])=>n); }
+
+/* ════════════ RENDER ════════════ */
+let scriptFilter='all';
+
+function renderAll(){
+  if(!extData) return;
+  const sc=extData.scripts,jur=sc.filter(s=>s.hc||s.hf);
+  // badge counts
+  qs('#t-sc-n').textContent=jur.length||sc.length;
+  qs('#t-as-n').textContent=extData.assets.length;
+  qs('#t-lk-n').textContent=extData.links.length;
+  qs('#t-api-n').textContent=extData.apis.length;
+  qs('#t-sc-n').className='badge '+(jur.length?'b-yellow':'b-blue');
+  qs('#sc-summary').textContent=`${sc.length} scripts inline encontrados · ${jur.length} com lógica jurídica/fórmulas · ${extData.assets.filter(a=>a.type==='script').length} arquivos .js externos`;
+  renderScripts();renderOverview();renderAssets();renderLinks();renderApis();
+}
+
+function renderScripts(){
+  if(!extData) return;
+  const all=extData.scripts;
+  const show=scriptFilter==='all'?all:scriptFilter==='calc'?all.filter(s=>s.hc):scriptFilter==='math'?all.filter(s=>s.hf):all.filter(s=>s.ha);
+
+  qs('#sc-list').innerHTML=show.length
+    ?show.map(s=>`
+      <div class="script-card">
+        <div class="script-head">
+          <div style="display:flex;gap:4px;flex-wrap:wrap;align-items:center">
+            <span class="badge b-muted">Script #${s.i+1}</span>
+            ${s.hc?'<span class="badge b-yellow">⚖️ Cálculo</span>':''}
+            ${s.hf?'<span class="badge b-purple">📐 Fórmula</span>':''}
+            ${s.ha?'<span class="badge b-green">🌐 AJAX/Fetch</span>':''}
+            <span class="badge b-muted">${(s.size/1024).toFixed(1)} KB</span>
+          </div>
+          <div class="script-actions">
+            <button class="btn btn-ghost btn-sm" onclick="copyText(extData.scripts[${s.i}].full)">📋</button>
+            <button class="btn btn-secondary btn-sm" onclick="showModal('Script #${s.i+1} ('+extData.scripts[${s.i}].size+'B)',extData.scripts[${s.i}].full)">👁 Ver tudo</button>
+            <button class="btn btn-ghost btn-sm" onclick="analyzeScript(${s.i})">🤖 Analisar</button>
+          </div>
+        </div>
+        <div class="script-pre">${esc(s.pre)}${s.full.length>500?'\n…[mais '+(s.size-500)+' chars]':''}</div>
+      </div>`).join('')
+    :`<div class="empty">Nenhum script com esse filtro</div>`;
+
+  // External JS files
+  const extJs=extData.assets.filter(a=>a.type==='script');
+  qs('#ext-js-list').innerHTML=extJs.length?`
+    <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Arquivos .js externos (${extJs.length})</div>
+    <div class="list-box">
+      ${extJs.map(a=>`
+        <div class="list-row">
+          <span class="badge b-blue">JS</span>
+          <span class="list-row-url" title="${esc(a.url)}">${esc(a.name||a.url.split('/').pop())}</span>
+          <button class="btn btn-ghost btn-sm" onclick="loadExternal('${esc(a.url)}')">👁 Ver</button>
+          <a href="${esc(a.url)}" target="_blank"><button class="btn btn-ghost btn-sm">🔗</button></a>
+        </div>`).join('')}
+    </div>`:'' ;
+}
+
+function filterScripts(f,btn){
+  scriptFilter=f;
+  qsa('.sc-filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderScripts();
+}
+
+function renderOverview(){
+  if(!extData) return;
+  const jur=extData.scripts.filter(s=>s.hc||s.hf);
+  qs('#ov-stats').innerHTML=[
+    {n:extData.scripts.length,l:'Scripts inline',c:'primary'},
+    {n:jur.length,l:'⚖️ Jurídico',c:'yellow'},
+    {n:extData.assets.length,l:'Arquivos',c:'primary'},
+    {n:extData.apis.length,l:'Rotas API',c:'purple'},
+    {n:extData.tech.length,l:'Tecnologias',c:'green'},
+    {n:extData.links.filter(l=>l.ext).length,l:'Links ext.',c:'muted'},
+  ].map(s=>`<div class="stat-tile"><div class="stat-n" style="color:var(--${s.c})">${s.n}</div><div class="stat-l">${s.l}</div></div>`).join('');
+
+  qs('#ov-meta').innerHTML=`
+    <div class="meta-box">
+      <div class="meta-row"><span class="meta-key">Site</span><span class="meta-val"><a href="${esc(extData.meta.url)}" target="_blank">${esc(extData.meta.url)}</a></span></div>
+      <div class="meta-row"><span class="meta-key">Título</span><span class="meta-val">${esc(extData.meta.title||'—')}</span></div>
+      <div class="meta-row"><span class="meta-key">Idioma</span><span class="meta-val">${esc(extData.meta.lang||'—')}</span></div>
+      <div class="meta-row"><span class="meta-key">Descrição</span><span class="meta-val">${esc(extData.meta.desc?.slice(0,200)||'—')}</span></div>
+      ${extData.meta.gen?`<div class="meta-row"><span class="meta-key">Gerador</span><span class="meta-val">${esc(extData.meta.gen)}</span></div>`:''}
+    </div>`;
+
+  qs('#ov-tech').innerHTML=extData.tech.length
+    ?'<div style="font-size:11px;color:var(--muted);margin-bottom:6px">Tecnologias detectadas:</div>'+extData.tech.map(t=>`<span class="badge b-purple" style="margin:2px">${esc(t)}</span>`).join('')
+    :'';
+}
+
+function renderAssets(){
+  if(!extData) return;
+  const ft=(qs('#af-txt')?.value||'').toLowerCase();
+  const tp=qs('#af-type')?.value||'';
+  const TYPE_ICON={script:'📜',stylesheet:'🎨',image:'🖼',font:'🔤'};
+  const items=extData.assets.filter(a=>(!tp||a.type===tp)&&(!ft||a.url.toLowerCase().includes(ft)||a.name.toLowerCase().includes(ft)));
+  qs('#as-list').innerHTML=items.length
+    ?items.map(a=>`
+      <div class="list-row">
+        <span class="badge b-blue" style="min-width:60px;justify-content:center">${TYPE_ICON[a.type]||''} ${esc(a.type)}</span>
+        <span class="list-row-url" title="${esc(a.url)}">${esc(a.name||a.url)}</span>
+        ${a.type==='script'?`<button class="btn btn-ghost btn-sm" onclick="loadExternal('${esc(a.url)}')">👁</button>`:''}
+        <a href="${esc(a.url)}" target="_blank"><button class="btn btn-ghost btn-sm">🔗</button></a>
+      </div>`).join('')
+    :`<div class="empty">Nenhum arquivo</div>`;
+}
+
+function renderLinks(){
+  if(!extData) return;
+  const ft=(qs('#lf-txt')?.value||'').toLowerCase();
+  const ex=qs('#lf-ext')?.value||'';
+  const items=extData.links.filter(l=>
+    (!ex||(ex==='int'&&!l.ext)||(ex==='ext'&&l.ext))&&
+    (!ft||l.url.toLowerCase().includes(ft)||l.text.toLowerCase().includes(ft))
+  );
+  qs('#lk-list').innerHTML=items.length
+    ?items.map(l=>`
+      <div class="link-row">
+        <div style="flex:1;overflow:hidden">
+          <div class="link-text">${esc(l.text)}</div>
+          <a href="${esc(l.url)}" target="_blank" class="link-url">${esc(l.url)}</a>
+        </div>
+        <span class="badge ${l.ext?'b-yellow':'b-blue'}">${l.ext?'Externo':'Interno'}</span>
+      </div>`).join('')
+    :`<div class="empty">Nenhum link</div>`;
+}
+
+function renderApis(){
+  if(!extData) return;
+  qs('#api-list').innerHTML=extData.apis.length
+    ?extData.apis.map(a=>`
+      <div class="list-row">
+        <span class="badge b-purple">API</span>
+        <span class="list-row-url" style="color:var(--purple)" title="${esc(a.url)}">${esc(a.path)}</span>
+        <a href="${esc(a.url)}" target="_blank"><button class="btn btn-ghost btn-sm">🔗</button></a>
+      </div>`).join('')
+    :`<div class="empty">Nenhuma rota de API detectada</div>`;
+}
+
+/* ════════════ TABS ════════════ */
+function switchTab(name,btn){
+  qsa('.tab').forEach(b=>b.classList.remove('active'));
+  qsa('.tab-panel').forEach(p=>{p.classList.remove('active');p.style.display='none';});
+  btn.classList.add('active');
+  const el=qs(`#tp-${name}`);
+  if(el){el.classList.add('active');el.style.display='block';}
+}
+
+/* ════════════ DOWNLOADS ════════════ */
+function dlScripts(){
+  if(!extData) return;
+  const c=extData.scripts.map((s,i)=>`/* ═══ SCRIPT #${i+1} | ${(s.size/1024).toFixed(1)}KB | Cálculo:${s.hc?'SIM':'não'} | Fórmula:${s.hf?'SIM':'não'} | AJAX:${s.ha?'SIM':'não'} ═══ */\n\n${s.full}`).join('\n\n\n');
+  if(!c){toast('Nenhum script para baixar','warn');return;}
+  try{dlBlob(new Blob([c],{type:'text/javascript'}),`scripts-${new URL(extData.rootUrl).hostname}-${Date.now()}.js`);}catch{}
+}
+
+function dlHtml(){
+  if(!extData) return;
+  dlBlob(new Blob([extData.rawHtml],{type:'text/html'}),`pagina-${new URL(extData.rootUrl).hostname}.html`);
+}
+
+function dlReport(){
+  if(!extData) return;
+  const jur=extData.scripts.filter(s=>s.hc||s.hf);
+  const txt=[
+    `RELATÓRIO DE EXTRAÇÃO — EXTRATOR JURÍDICO`,
+    `Advogado: Maikon Caldeira — OAB/MG 183712`,
+    `Data: ${new Date().toLocaleString('pt-BR')}`,
+    ``,
+    `URL: ${extData.rootUrl}`,
+    `Título: ${extData.meta.title}`,
+    `Idioma: ${extData.meta.lang}`,
+    ``,
+    `═══ RESUMO ═══`,
+    `Scripts inline: ${extData.scripts.length}`,
+    `Scripts jurídicos: ${jur.length}`,
+    `Arquivos externos: ${extData.assets.length}`,
+    `Links: ${extData.links.length}`,
+    `Rotas de API: ${extData.apis.length}`,
+    `Tecnologias: ${extData.tech.join(', ')||'—'}`,
+    ``,
+    `═══ SCRIPTS COM LÓGICA JURÍDICA ═══`,
+    ...jur.map((s,i)=>[`\n--- Script #${s.i+1} (${(s.size/1024).toFixed(1)}KB) ---`,`Cálculo: ${s.hc?'SIM':'não'} | Fórmula: ${s.hf?'SIM':'não'} | AJAX: ${s.ha?'SIM':'não'}`,``,s.full.slice(0,3000),(s.full.length>3000?'[...continua]':'')].join('\n')),
+    ``,
+    `═══ ARQUIVOS .JS EXTERNOS ═══`,
+    ...extData.assets.filter(a=>a.type==='script').map(a=>a.url),
+  ].join('\n');
+  dlBlob(new Blob([txt],{type:'text/plain;charset=utf-8'}),`relatorio-${new URL(extData.rootUrl).hostname}.txt`);
+}
+
+/* ════════════ MODAL ════════════ */
+function showModal(title,content){qs('#cm-title').textContent=title;qs('#cm-body').textContent=content;qs('#code-modal').classList.add('open');}
+function closeModal(){qs('#code-modal').classList.remove('open');}
+function copyModal(){copyText(qs('#cm-body').textContent);}
+
+async function loadExternal(url){
+  showModal('Carregando…','⏳ Buscando via proxy…');
+  try{
+    let txt;
+    try{const r=await fetch(url,{signal:AbortSignal.timeout(8000)});txt=await r.text();}
+    catch{txt=await fetchViaProxy(url);}
+    qs('#cm-body').textContent=txt;
+    qs('#cm-title').textContent=url.split('/').pop()||url;
+  }catch(err){qs('#cm-body').textContent='❌ '+err.message;}
+}
+
+function analyzeScript(i){
+  if(!extData) return;
+  const s=extData.scripts[i];
+  qs('#ai-panel').classList.remove('hidden');
+  qs('#ai-ta').value=`Analise esse script e explique o que ele calcula, quais fórmulas usa e como funciona:\n\n\`\`\`javascript\n${s.full.slice(0,3000)}\n\`\`\``;
+  qs('#ai-msgs').scrollTop=qs('#ai-msgs').scrollHeight;
+}
+
+/* ════════════ CLOSE ON OVERLAY ════════════ */
+qs('#code-modal').addEventListener('click',e=>{if(e.target===qs('#code-modal'))closeModal();});
+qs('#key-modal').addEventListener('click',e=>{if(e.target===qs('#key-modal'))closeKeyModal();});
+
+/* ════════════ INIT ════════════ */
+loadKeyFromStorage();
+addMsg('sys','Olá! Cole uma URL acima para extrair scripts de cálculo do site. Depois clique em 🤖 para que eu analise os scripts encontrados.');
+updateKeyHint();
+</script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "name": "sk-code-editor-desktop",
+  "version": "5.3.0",
+  "description": "SK Code Editor — versao desktop",
+  "main": "server.js",
+  "bin": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "build:win":   "pkg server.js --target node18-win-x64   --output ../dist-desktop/SKCodeEditor.exe",
+    "build:linux": "pkg server.js --target node18-linux-x64 --output ../dist-desktop/SKCodeEditor-linux",
+    "build:mac":   "pkg server.js --target node18-macos-x64 --output ../dist-desktop/SKCodeEditor-mac"
+  },
+  "pkg": {
+    "targets": ["node18-win-x64"],
+    "outputPath": "../dist-desktop",
+    "assets": []
+  }
+}

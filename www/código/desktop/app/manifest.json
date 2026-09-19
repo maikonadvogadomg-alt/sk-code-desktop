@@ -1,0 +1,48 @@
+{
+  "name": "SK Code Editor",
+  "short_name": "SK Editor",
+  "description": "Editor de código profissional com IA para mobile",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0d1117",
+  "theme_color": "#1a237e",
+  "categories": ["developer", "productivity", "utilities"],
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Novo Projeto",
+      "short_name": "Novo",
+      "description": "Criar um novo projeto",
+      "url": "./"
+    }
+  ]
+}
